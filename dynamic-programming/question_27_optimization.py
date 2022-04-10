@@ -31,8 +31,8 @@ def __prob(k, s):
     return s / (8 ** k)
 
 
-# O(n² * k) - Time Complexity
-# O(n² * k) - Space Complexity
+# O(k) - Time Complexity
+# O(n) - Space Complexity
 def __recursive(n, k, cur_row, cur_column, cache):
     if cur_row < 0 or cur_column < 0 or cur_row >= n or cur_column >= n:
         return 0
