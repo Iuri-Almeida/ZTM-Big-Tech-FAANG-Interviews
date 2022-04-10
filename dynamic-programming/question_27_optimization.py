@@ -25,42 +25,40 @@ knight_movements = [
 ]
 
 
+# O(1) - Time Complexity
+# O(1) - Space Complexity
 def __prob(k, s):
     return s / (8 ** k)
 
 
-def __create_mtx(n):
-    mtx = []
-    for _ in range(n):
-        r = []
-        for _ in range(n):
-            r.append(0)
-        mtx.append(r)
-    return mtx
-
-
-def __recursive(mtx, k, cur_row, cur_column, count=0):
-    if cur_row < 0 or cur_column < 0 or cur_row >= len(mtx) or cur_column >= len(mtx[0]):
+# O(n² * k) - Time Complexity
+# O(n² * k) - Space Complexity
+def __recursive(n, k, cur_row, cur_column, cache):
+    if cur_row < 0 or cur_column < 0 or cur_row >= n or cur_column >= n:
         return 0
-    if count == k:
+    if k == 0:
         return 1
+
+    pos = str((cur_row, cur_column))
+    if pos in cache:
+        return cache[pos]
 
     global knight_movements
 
-    total = 0
+    cache[pos] = 0
     for mov in knight_movements:
-        total += __recursive(mtx, k, cur_row + mov[0], cur_column + mov[1], count + 1)
+        cache[pos] += __recursive(n, k - 1, cur_row + mov[0], cur_column + mov[1], cache)
 
-    return total
+    return cache[pos]
 
 
 def knight_final_moves(n, k, row, column):
-    mtx = __create_mtx(n)
-    return __prob(k, __recursive(mtx, k, row, column))
+    cache = dict()
+    return __prob(k, __recursive(n, k, row, column, cache))
 
 
-n = 2
-k = 0
-row = 1
-column = 1
+n = 3
+k = 2
+row = 0
+column = 0
 print(knight_final_moves(n, k, row, column))
